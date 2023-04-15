@@ -23,14 +23,7 @@ const username_schema = new mongoose.Schema({
   }
 });
 
-username_schema.set('toJSON', {
-  transform: function(doc, ret, options) {
-    return {
-      username: ret.username,
-      _id: ret._id
-    };
-  }
-});
+
 
 let person = mongoose.model('username', username_schema);
 
@@ -44,7 +37,7 @@ const create_user = (user,done)=>{
 }
 
 const get_all_users=(done)=>{
-  person.find({}).select('username _id').exec().then(
+  person.find({}).select('username _id').then(
     res=>done(null,res)
   ).catch(
     err=>console.log(err)
