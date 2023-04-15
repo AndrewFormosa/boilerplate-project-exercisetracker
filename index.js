@@ -18,15 +18,24 @@ let mongoose = require("mongoose");
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const username_schema = new mongoose.Schema({
-  name: {
+  username: {
     type: String,
+  }
+});
+
+username_schema.set('toJSON', {
+  transform: function(doc, ret, options) {
+    return {
+      username: ret.username,
+      _id: ret._id
+    };
   }
 });
 
 let person = mongoose.model('username', username_schema);
 
 const create_user = (user,done)=>{
-  let newUser = new person({name:user});
+  let newUser = new person({username:user});
   newUser.save().then(
    res=> done(null,res),
   ).catch(
@@ -34,6 +43,13 @@ const create_user = (user,done)=>{
   );
 }
 
+const get_all_users=(done)=>{
+  person.find({}).select('username _id').exec().then(
+    res=>done(null,res)
+  ).catch(
+    err=>console.log(err)
+  );
+}
 
 
 const bodyParser = require("body-parser");
@@ -42,12 +58,17 @@ app.use("/api/users",bodyParser.urlencoded({extended: false}));
 app.route('/api/users').post((req,res)=>{
  user=req.body.username;
  create_user(user,function(err,data){
-  res.json({"username":data.name, "_id":data._id});
+  res.json({"username":data.username, "_id":data._id});
  })
-// 
 });
 
-
+app.get('/api/users',(req,res)=>{
+  get_all_users(function(err,data){
+    console.log(data)
+    res.send(data)
+  })
+  }
+);
 
 
 
