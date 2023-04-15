@@ -1,0 +1,13 @@
+Example API Query Post, Gets and Returns
+https://exercise-tracker.freecodecamp.rocks/api/users
+[{"_id":"61204ee8f5860e05a3652f0e","username":"fcc_test_16295073006","__v":0},{"_id":"61204ee8f5860e05a3652f0f","username":"fcc_test_16295073012","__v":0},{"_id":"61204ee9f5860e05a3652f11","username":"fcc_test_16295073016","__v":0}]
+
+
+
+https://exercise-tracker.freecodecamp.rocks/api/users/64392fcaa73a5f07db40c8ef/logs
+{"_id":"64392fcaa73a5f07db40c8ef","username":"andrewFormosa","count":1,"log":[{"description":"sit_ups","duration":5,"date":"Fri Apr 14 2023"}]}
+
+https://exercise-tracker.freecodecamp.rocks/api/users/64392fcaa73a5f07db40c8ef/logs?from=2023-04-02&to=2023-04-08&limit=2
+{"_id":"64392fcaa73a5f07db40c8ef","username":"andrewFormosa","from":"Sun Apr 02 2023","to":"Sat Apr 08 2023","count":2,"log":[{"description":"steps","duration":15,"date":"Sat Apr 08 2023"},{"description":"steps","duration":15,"date":"Wed Apr 05 2023"}]}
+
+
