@@ -111,10 +111,8 @@ app.route('/api/users/:_id/exercises').post((req,res)=>{
 
 //get exercise log of user
 const get_log_data=(_id,query,done)=>{
-  //magae query
- 
-  
-  //find the userdata
+
+  //find the userdata from the _id parameter
   person.findById(_id)
   .select('-log._id')
   .then(res=>{
@@ -122,23 +120,22 @@ const get_log_data=(_id,query,done)=>{
    console.log(res.log);
 
    //filter logs within dates, slice the array to the limited size
-
+     //magae query data using query parameter
   var startDate=new Date(1900-01-01);
   var endDate=new Date();
   var limit=res.log.length;
   if(query.to!=null){endDate=new Date(query.to)}
-  if(query.from!=null){startDate=new Date( new Date(query.from).getTime()-(24*60*60*1000) )}
+  if(query.from!=null){startDate=new Date( new Date(query.from).getTime()-(24*60*60*1000) )}//subract 1 day from the date.
   if(query.limit!=null){limit=query.limit}
-  console.log(query);
 
-  console.log(_id);
-
+  //create a new log array based on the filtered data
    var newLog = res.log.filter(function(data){
       var logDate = new Date(data.date);
       return (logDate>startDate&&logDate<=endDate);
    }).slice(0,limit);
-    var response={username:res.username,count:res.log.length,_id:_id,log:newLog};
-    
+
+   //create response object and send back with the done call back parameter.
+    var response={username:res.username,count:res.log.length,_id:_id,log:newLog};  
     done(null,response);
   })
   .catch(err=>{console.log(err)});
@@ -146,13 +143,10 @@ const get_log_data=(_id,query,done)=>{
 
 app.get('/api/users/:_id/logs',(req,res)=>{
   get_log_data(req.params._id,req.query,function(err,data){
-    console.log(data);
     res.send(data)
   })
   }
 );
-
-
 
 
 
